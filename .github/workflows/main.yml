@@ -80,9 +80,9 @@ jobs:
     name: APK Difference
     needs: [ build ]
     runs-on: ubuntu-latest
-      permissions:
-        contents: read
-        packages: write
+    permissions:
+      contents: read
+      packages: write
 
       steps:
         - name: Checkout
