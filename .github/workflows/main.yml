@@ -100,6 +100,8 @@ jobs:
             gh release download -p '*.jar' -R jakewharton/diffuse 0.1.0
             java -jar diffuse-0.1.0-binary.jar diff artifacts app/build/outputs/apk/debug/app-debug.apk > apk_differences.txt
             { echo "\`\`\`"; head -n 17 apk_differences.txt; echo "\`\`\`"; echo; } >> apk_differences_summary.txt
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         - name: Upload Apk Diff Results
           uses: actions/upload-artifact@v3
