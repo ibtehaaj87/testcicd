@@ -38,7 +38,7 @@ jobs:
 
       - name: Generate AAR and APK files
         if: always()
-        run: ./gradlew assembleDevDebug
+        run: ./gradlew assembleDebug
 
       - name: Upload AAR files
         if: always()
