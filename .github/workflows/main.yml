@@ -31,7 +31,7 @@ jobs:
         run: ./gradlew testDebugUnitTest
 
       - name: CodeAnalysis via  detekt
-        run: ./gradlew detekt
+        run:  natiginfo/action-detekt-all@1.17.0
 
       - name: Upload detekt results
         uses: actions/upload-artifact@v2
