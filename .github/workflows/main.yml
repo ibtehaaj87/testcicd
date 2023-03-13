@@ -92,7 +92,7 @@ jobs:
           uses: dawidd6/action-download-artifact@v2
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            workflow: post_merge.yml
+            workflow: main.yml
             name: app-debug.apk
 
         - name: Run Apk Diff
