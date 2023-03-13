@@ -9,41 +9,9 @@ on:
 
 jobs:
 
-  Lint:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: CodeAnalysis via  detekt
-        run: ./gradlew detekt
-
-      - name: Upload detekt results
-        uses: actions/upload-artifact@v2
-        with:
-          name: detekt_results
-          path: app/build/reports/detekt
-
-  Unit Tests:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Run Unit Tests
-        if: always()
-        run: ./gradlew testDebugUnitTest
-
-
-  Build:
+  build:
+    name: Build
+    needs: [ lint, test ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,3 +40,44 @@ jobs:
           path: |
             app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/arr
+
+  test:
+    name: Run Unit Tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Unit Tests
+        if: always()
+        run: ./gradlew testDebugUnitTest
+
+  lint:
+    name: Lint
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: CodeAnalysis via  detekt
+        run: ./gradlew detekt
+
+      - name: Upload detekt results
+        uses: actions/upload-artifact@v2
+        with:
+          name: detekt_results
+          path: app/build/reports/detekt
+
+
+
+
