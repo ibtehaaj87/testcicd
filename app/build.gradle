@@ -3,6 +3,22 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+detekt {
+    parallel = true
+    allRules = true
+    ignoreFailures = true
+    debug = true
+}
+
+tasks.named("detekt").configure {
+    reports {
+        html.required.set(true)
+        sarif.required.set(false)
+        xml.required.set(false)
+        txt.required.set(false)
+    }
+}
+
 android {
     namespace 'com.example.testcicd'
     compileSdk 33
@@ -31,6 +47,8 @@ android {
         jvmTarget = '1.8'
     }
 }
+
+
 
 dependencies {
 

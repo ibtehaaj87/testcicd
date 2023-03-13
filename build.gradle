@@ -3,4 +3,16 @@ plugins {
     id 'com.android.application' version '7.4.1' apply false
     id 'com.android.library' version '7.4.1' apply false
     id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
+    id("io.gitlab.arturbosch.detekt").version("1.21.0").apply(false)
+
 }
+
+subprojects {
+    apply plugin: "io.gitlab.arturbosch.detekt"
+    detekt {
+        config = files("${project.rootDir}/config/detekt.yml")
+        parallel = true
+    }
+}
+
+
