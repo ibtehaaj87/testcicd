@@ -8,27 +8,16 @@ on:
       - main
 
 jobs:
-  basic_job:
+
+  Lint:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
 
     steps:
-
-      - name: Setup Actions.
+      - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v2
-        with:
-          java-version: '11'
-          distribution: 'temurin'
-          cache: gradle
-
-      - name: Run Unit Tests
-        if: always()
-        run: ./gradlew testDebugUnitTest
 
       - name: CodeAnalysis via  detekt
         run: ./gradlew detekt
@@ -38,6 +27,38 @@ jobs:
         with:
           name: detekt_results
           path: app/build/reports/detekt
+
+  Unit Tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Unit Tests
+        if: always()
+        run: ./gradlew testDebugUnitTest
+
+
+  Build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+          cache: gradle
 
       - name: Generate AAR and APK files
         if: always()
