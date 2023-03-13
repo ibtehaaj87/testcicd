@@ -5,7 +5,7 @@ on:
     types:
       [opened, edited]
     branches:
-      -main
+      - main
 
 jobs:
   basic_job:
