@@ -137,9 +137,28 @@ jobs:
           name: apk_differences
           path: apk_differences_summary.txt
 
-      - name: Upload Apk Diff Results
+      - name: Write the PR Number
+          run: |
+            echo ${{ github.event.number }} > pr.txt
+
+      - name: Upload PR Number
         uses: actions/upload-artifact@v3
-        if: success()
         with:
-          name: apk_differences
-          path: apk_differences_summary.txt
+          name: pr
+          path: pr.txt
+
+  comment_apk_diff_results:
+    name: Comment APK Difference Results
+    needs: [ apk_difference ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Comment with Apk Diff Results
+        run: |
+          export PR=`cat pr.txt | head -1`
+          gh pr -R quran/quran_android comment $PR -F apk_differences_summary.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
