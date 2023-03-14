@@ -122,8 +122,20 @@ jobs:
         with:
           name: apk_main
 
-      - name: Execute Diffuse
-        run: ./diffuse diff apk_pr/app-debug.apk apk_main/app-debug.apk
+      - name: Run Apk Diff
+          run: |
+            gh release download -p '*.jar' -R jakewharton/diffuse 0.1.0
+            java -jar diffuse-0.1.0-binary.jar diff apk_pr/app-debug.apk apk_main/app-debug.apk > apk_differences.txt
+            { echo "\`\`\`"; head -n 17 apk_differences.txt; echo "\`\`\`"; echo; } >> apk_differences_summary.txt
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Apk Diff Results
+        uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: apk_differences
+          path: apk_differences_summary.txt
 
       - name: Upload Apk Diff Results
         uses: actions/upload-artifact@v3
