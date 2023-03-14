@@ -138,8 +138,8 @@ jobs:
           path: apk_differences_summary.txt
 
       - name: Write the PR Number
-          run: |
-            echo ${{ github.event.number }} > pr.txt
+        run: |
+          echo ${{ github.event.number }} > pr.txt
 
       - name: Upload PR Number
         uses: actions/upload-artifact@v3
