@@ -158,7 +158,7 @@ jobs:
     steps:
       - name: Comment with Apk Diff Results
         run: |
-          export PR=`cat pr.txt | head -1`
+          export PR=`cat pr/pr.txt | head -1`
           gh pr -R quran/quran_android comment $PR -F apk_differences_summary.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
