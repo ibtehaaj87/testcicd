@@ -156,7 +156,7 @@ jobs:
     steps:
       - name: Comment with Apk Diff Results
         run: |
-          export PR= ${{ github.event.number }}
-          gh pr -R quran/quran_android comment `cat $PR | head -1` -F apk_differences_summary.txt
+          export PR = ` cat {{ github.event.number }} | head -1 `
+          gh pr -R quran/quran_android comment $PR -F apk_differences_summary.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
