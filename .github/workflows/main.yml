@@ -73,9 +73,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: apk
+          name: apk_main
           path: |
-            app/build/outputs/apk/debug/apk-master.apk
+            app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/arr
 
   build_pr:
@@ -98,9 +98,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: apk
+          name: apk_pr
           path: |
-            app/build/outputs/apk/debug/apk-pr.apk
+            app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/arr
 
   apk_difference:
@@ -119,7 +119,7 @@ jobs:
         with:
           name: apk
       - name: Execute Diffuse
-        run: ./diffuse diff apk/apk-master.apk apk/apk-pr.apk
+        run: ./diffuse diff apk_pr/app-debug.apk apk_master/app-debug.apk
 
       - name: Upload Apk Diff Results
         uses: actions/upload-artifact@v3
