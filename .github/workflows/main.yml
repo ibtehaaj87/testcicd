@@ -117,9 +117,13 @@ jobs:
       - name: Download APKs
         uses: actions/download-artifact@v1
         with:
-          name: apk
+          name: apk_pr
+      - uses: actions/download-artifact@v1
+        with:
+          name: apk_main
+
       - name: Execute Diffuse
-        run: ./diffuse diff apk_pr/app-debug.apk apk_master/app-debug.apk
+        run: ./diffuse diff apk_pr/app-debug.apk apk_main/app-debug.apk
 
       - name: Upload Apk Diff Results
         uses: actions/upload-artifact@v3
