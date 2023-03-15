@@ -154,7 +154,10 @@ jobs:
       packages: write
 
     steps:
-      - uses: actions/download-artifact@v1
+      - uses: actions/checkout@v1
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
         with:
           name: apk_differences
 
