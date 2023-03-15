@@ -163,7 +163,5 @@ jobs:
 
       - name: comment PR
         uses: thollander/actions-comment-pull-request@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           filePath: apk_differences/apk_differences_summary.txt
