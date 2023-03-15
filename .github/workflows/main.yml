@@ -154,9 +154,9 @@ jobs:
       packages: write
 
     steps:
-      - name: Comment with Apk Diff Results
-        run: |
-          export PR = ${{ github.event.number }}
-          gh pr -R quran/quran_android comment $PR -F apk_differences_summary.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: comment PR
+          uses: machine-learning-apps/pr-comment@master
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            path: apk_differences/apk_differences_summary.txt
