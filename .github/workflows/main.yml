@@ -155,8 +155,6 @@ jobs:
 
     steps:
       - name: comment PR
-        uses: machine-learning-apps/pr-comment@1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: thollander/actions-comment-pull-request@v2.3.1
         with:
-          path: apk_differences/apk_differences_summary.txt
+          filePath: apk_differences/apk_differences_summary.txt
