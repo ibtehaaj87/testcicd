@@ -126,7 +126,7 @@ jobs:
           java -jar diffuse-0.1.0-binary.jar diff apk_pr/apk/debug/app-debug.apk apk_main/apk/debug/app-debug.apk > apk_differences.txt
           { echo "\`\`\`"; head -n 17 apk_differences.txt; echo "\`\`\`"; echo; } >> apk_differences_summary.txt
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload Apk Diff Results
         uses: actions/upload-artifact@v3
