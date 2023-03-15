@@ -166,4 +166,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          filePath: apk_differences/apk_differences_summary.txt
+          path: apk_differences/apk_differences_summary.txt
