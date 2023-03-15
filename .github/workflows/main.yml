@@ -2,8 +2,6 @@ name: Pull Request Workflow
 
 on:
   pull_request:
-    types:
-      [opened, edited]
     branches:
       - main
 
@@ -51,8 +49,35 @@ jobs:
         if: always()
         run: ./gradlew testDebugUnitTest
 
-  build:
-    name: Build
+  build_main:
+    name: Build Main APK
+    needs: [ test, lint ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Generate AAR and APK files
+        if: always()
+        run: ./gradlew assembleDebug
+
+      - name: Upload AAR files
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk_main
+          path: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/arr
+
+  build_pr:
+    name: Build PR
     needs: [ test, lint ]
     runs-on: ubuntu-latest
     permissions:
@@ -71,41 +96,75 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v2
         with:
-          name: artifacts
+          name: apk_pr
           path: |
             app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/arr
 
   apk_difference:
     name: APK Difference
-    needs: [ build ]
+    needs: [ build_main, build_pr ]
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
 
     steps:
-        - name: Checkout
-          uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
-        - name: Download Previous Debug APK
-          uses: dawidd6/action-download-artifact@v2
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            workflow: main.yml
-            name: artifacts
+      - name: Download APKs
+        uses: actions/download-artifact@v1
+        with:
+          name: apk_pr
+      - uses: actions/download-artifact@v1
+        with:
+          name: apk_main
 
-        - name: Run Apk Diff
-          run: |
-            gh release download -p '*.jar' -R jakewharton/diffuse 0.1.0
-            java -jar diffuse-0.1.0-binary.jar diff app-debug.apk app/build/outputs/apk/debug/app-debug.apk > apk_differences.txt
-            { echo "\`\`\`"; head -n 17 apk_differences.txt; echo "\`\`\`"; echo; } >> apk_differences_summary.txt
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run Apk Diff
+        run: |
+          gh release download -p '*.jar' -R jakewharton/diffuse 0.1.0
+          java -jar diffuse-0.1.0-binary.jar diff apk_pr/apk/debug/app-debug.apk apk_main/apk/debug/app-debug.apk > apk_differences.txt
+          { echo "\`\`\`"; head -n 17 apk_differences.txt; echo "\`\`\`"; echo; } >> apk_differences_summary.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Upload Apk Diff Results
-          uses: actions/upload-artifact@v3
-          if: success()
-          with:
-            name: apk_differences
-            path: apk_differences_summary.txt
+      - name: Upload Apk Diff Results
+        uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: apk_differences
+          path: apk_differences_summary.txt
+
+      - name: Write the PR Number
+        run: |
+          echo ${{ github.event.number }} > pr.txt
+
+      - name: Upload PR Number
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr
+          path: pr.txt
+
+  comment_apk_diff_results:
+    name: Comment APK Difference Results
+    needs: [ apk_difference ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: apk_differences
+
+      - name: comment PR
+        uses: machine-learning-apps/pr-comment@1.0.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          path: apk_differences/apk_differences_summary.txt
