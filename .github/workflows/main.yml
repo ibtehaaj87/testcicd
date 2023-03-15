@@ -2,6 +2,7 @@ name: Pull Request Workflow
 
 on:
   pull_request:
+    types: [created, synchronize]
     branches:
       - main
 
@@ -134,15 +135,6 @@ jobs:
           name: apk_differences
           path: apk_differences_summary.txt
 
-      - name: Write the PR Number
-        run: |
-          echo ${{ github.event.number }} > pr.txt
-
-      - name: Upload PR Number
-        uses: actions/upload-artifact@v3
-        with:
-          name: pr
-          path: pr.txt
 
   comment_apk_diff_results:
     name: Comment APK Difference Results
