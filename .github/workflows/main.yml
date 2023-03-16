@@ -163,6 +163,9 @@ jobs:
     name: Find dependencies difference
     needs: [ build_main, build_pr ]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v2
@@ -171,9 +174,25 @@ jobs:
         run: |
           ./gradlew :app:dependencies > current_dependencies.txt
 
-      - name: Upload Apk Diff Results
-        uses: actions/upload-artifact@v3
-        if: success()
+      - uses: actions/checkout@v2
         with:
-          name: apk_differences2
-          path: current_dependencies.txt
+          ref: main
+
+      - name: Get dependencies list
+          run: |
+            ./gradlew :app:dependencies > previous_dependencies.txt    
+          
+      - name: Download and run dependency-diff-tldr
+        run: |
+          gh release download -p '*.jar' -R careem/dependency-diff-tldr v0.0.2
+          echo "Running Dependency Diff"
+          java -jar dependency-diff-tldr-r8.jar dependencies.txt current_dependencies.txt > difference.txt
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: comment PR
+          uses: machine-learning-apps/pr-comment@1.0.0
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
+          with:
+            path: difference.txt
