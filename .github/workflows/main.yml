@@ -179,8 +179,8 @@ jobs:
           ref: main
 
       - name: Get dependencies list
-          run: |
-            ./gradlew :app:dependencies > previous_dependencies.txt    
+        run: |
+          ./gradlew :app:dependencies > previous_dependencies.txt    
           
       - name: Download and run dependency-diff-tldr
         run: |
@@ -191,8 +191,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: comment PR
-          uses: machine-learning-apps/pr-comment@1.0.0
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
-          with:
-            path: difference.txt
+        uses: machine-learning-apps/pr-comment@1.0.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          path: difference.txt
