@@ -158,3 +158,15 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           path: apk_differences/apk_differences_summary.txt
+
+  find_dependencies_difference:
+    name: Find dependencies difference
+    needs: [ build_main, build_pr ]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Get dependencies list
+        run: |
+          ./gradlew :app:dependencies > current_dependencies.txt
