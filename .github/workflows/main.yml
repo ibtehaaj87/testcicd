@@ -191,7 +191,7 @@ jobs:
           ./gradlew :app:dependencies > previous_dependencies.txt
           
       - name: Uploading Previous Dependencies Artifact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         if: success()
         with:
           name: previous_dependencies
