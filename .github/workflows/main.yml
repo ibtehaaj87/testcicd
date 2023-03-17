@@ -175,25 +175,46 @@ jobs:
         run: |
           ./gradlew :app:dependencies > current_dependencies.txt
 
+      - name: Uploading Current Dependencies Artifact
+      - uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: current_dependencies
+          path: current_dependencies.txt
+
       - uses: actions/checkout@v2
         with:
           ref: main
 
       - name: Get dependencies list
         run: |
-          ./gradlew :app:dependencies > previous_dependencies.txt    
+          ./gradlew :app:dependencies > previous_dependencies.txt
+          
+      - name: Uploading Previous Dependencies Artifact
+      - uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: previous_dependencies
+          path: previous_dependencies.txt
           
       - name: Download and run dependency-diff-tldr
         run: |
           gh release download -p '*.jar' -R careem/dependency-diff-tldr v0.0.2
           echo "Running Dependency Diff"
-          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies.txt > difference.txt
+          java -jar dependency-diff-tldr-r8.jar previous_dependencies/previous_dependencies.txt current_dependencies/current_dependencies.txt > difference.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Uploading Previous Dependencies Artifact
+      - uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: apk_difference
+          path: difference.txt
 
       - name: comment PR
         uses: machine-learning-apps/pr-comment@1.0.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          path: difference.txt
+          path: apk_difference/difference.txt
