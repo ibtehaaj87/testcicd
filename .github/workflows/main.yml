@@ -176,7 +176,7 @@ jobs:
           ./gradlew :app:dependencies > current_dependencies.txt
 
       - name: Uploading Current Dependencies Artifact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         if: success()
         with:
           name: current_dependencies
