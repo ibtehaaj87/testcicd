@@ -206,7 +206,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Uploading Previous Dependencies Artifact
-      - uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3
         if: success()
         with:
           name: apk_difference
