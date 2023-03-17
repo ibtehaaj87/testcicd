@@ -201,7 +201,7 @@ jobs:
         run: |
           gh release download -p '*.jar' -R careem/dependency-diff-tldr v0.0.2
           echo "Running Dependency Diff"
-          java -jar dependency-diff-tldr-r8.jar previous_dependencies/previous_dependencies.txt current_dependencies/current_dependencies.txt > difference.txt
+          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies.txt > difference.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
