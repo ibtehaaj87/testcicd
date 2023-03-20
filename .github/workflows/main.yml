@@ -34,7 +34,7 @@ jobs:
           detekt_config: config/detekt.yml
           reviewdog_reporter: github-pr-review
           fail_on_error: true
-          reviewdog_level: warning
+          reviewdog_level: error
 
 #      - name: CodeAnalysis via  detekt
 #        run: ./gradlew detekt
