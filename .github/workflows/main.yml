@@ -30,7 +30,7 @@ jobs:
         uses: alaegin/Detekt-Action@v1.22.0
         with:
           github_token: ${{ github.token }}
-          detekt_config: ../config/detekt-config.yml
+          detekt_config: config/detekt.yml
 
 #      - name: CodeAnalysis via  detekt
 #        run: ./gradlew detekt
