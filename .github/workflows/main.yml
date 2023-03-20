@@ -32,10 +32,9 @@ jobs:
         with:
           github_token: ${{ github.token }}
           detekt_config: config/detekt.yml
-          level: error
           reviewdog_reporter: github-pr-review
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN: ${{ github.token }}
+          fail_on_error: true
+          reviewdog_level: warning
 
 #      - name: CodeAnalysis via  detekt
 #        run: ./gradlew detekt
