@@ -2,6 +2,7 @@ name: Pull Request Workflow
 
 on:
   pull_request:
+    types: [created, synchronize]
     branches:
       - main
 
@@ -13,6 +14,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -25,21 +27,27 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: CodeAnalysis via  detekt
-        run: ./gradlew detekt
-
-      - name: Upload detekt results
-        uses: actions/upload-artifact@v2
+      - name: detekt
+        uses: alaegin/Detekt-Action@v1.22.0
         with:
-          name: detekt_results
-          path: app/build/reports/detekt
+          github_token: ${{ github.token }}
+          detekt_config: config/detekt.yml
+          reporter: github-pr-review
+
+#      - name: CodeAnalysis via  detekt
+#        run: ./gradlew detekt
+#
+#      - name: Upload detekt results
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: detekt_results
+#          path: app/build/reports/detekt
 
   test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
 
     steps:
       - name: Checkout
@@ -126,7 +134,7 @@ jobs:
           java -jar diffuse-0.1.0-binary.jar diff apk_pr/apk/debug/app-debug.apk apk_main/apk/debug/app-debug.apk > apk_differences.txt
           { echo "\`\`\`"; head -n 17 apk_differences.txt; echo "\`\`\`"; echo; } >> apk_differences_summary.txt
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Upload Apk Diff Results
         uses: actions/upload-artifact@v3
@@ -135,15 +143,6 @@ jobs:
           name: apk_differences
           path: apk_differences_summary.txt
 
-      - name: Write the PR Number
-        run: |
-          echo ${{ github.event.number }} > pr.txt
-
-      - name: Upload PR Number
-        uses: actions/upload-artifact@v3
-        with:
-          name: pr
-          path: pr.txt
 
   comment_apk_diff_results:
     name: Comment APK Difference Results
@@ -151,11 +150,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Download Artifact
         uses: actions/download-artifact@v1
@@ -168,3 +166,65 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           path: apk_differences/apk_differences_summary.txt
+
+
+
+#  find_dependencies_difference:
+#    name: Find dependencies difference
+#    needs: [ build_main, build_pr ]
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      pull-requests: write
+#      packages: write
+#
+#    steps:
+#      - uses: actions/checkout@v2
+#
+#      - name: Get dependencies list
+#        run: |
+#          ./gradlew :app:dependencies > current_dependencies.txt
+#
+#      - name: Uploading Current Dependencies Artifact
+#        uses: actions/upload-artifact@v3
+#        if: success()
+#        with:
+#          name: current_dependencies
+#          path: current_dependencies.txt
+#
+#      - uses: actions/checkout@v2
+#        with:
+#          ref: main
+#
+#      - name: Get dependencies list
+#        run: |
+#          ./gradlew :app:dependencies > previous_dependencies.txt
+#
+#      - name: Uploading Previous Dependencies Artifact
+#        uses: actions/upload-artifact@v3
+#        if: success()
+#        with:
+#          name: previous_dependencies
+#          path: previous_dependencies.txt
+#
+#      - name: Download and run dependency-diff-tldr
+#        run: |
+#          gh release download -p '*.jar' -R careem/dependency-diff-tldr v0.0.2
+#          echo "Running Dependency Diff"
+#          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies.txt > difference.txt
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#
+#      - name: Uploading Previous Dependencies Artifact
+#        uses: actions/upload-artifact@v3
+#        if: success()
+#        with:
+#          name: apk_difference
+#          path: difference.txt
+#
+#      - name: comment PR
+#        uses: machine-learning-apps/pr-comment@1.0.0
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
+#        with:
+#          path: apk_difference/difference.txt
