@@ -181,7 +181,6 @@ jobs:
 
       - name: comment PR
         uses: machine-learning-apps/pr-comment@1.0.0
+        message: $difference
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        with:
-          message: $difference
