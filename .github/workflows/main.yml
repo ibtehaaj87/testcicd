@@ -131,10 +131,10 @@ jobs:
 
       - name: comment PR
         uses: machine-learning-apps/pr-comment@1.0.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
         with:
           path: apk_differences_summary.txt
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
 
   find_dependencies_difference:
@@ -175,13 +175,13 @@ jobs:
         run: |
           gh release download -p '*.jar' -R careem/dependency-diff-tldr v0.0.2
           echo "Running Dependency Diff"
-          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies/current_dependencies.txt > difference
+          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies/current_dependencies.txt > difference.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: comment PR
-        uses: machine-learning-apps/pr-comment@1.0.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          message: $difference
+          uses: machine-learning-apps/pr-comment@1.0.0
+          with:
+            path: difference.txt
+          env:
+            GITHUB_TOKEN: ${{ github.token }}
