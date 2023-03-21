@@ -225,4 +225,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          path: apk_difference/difference.txt
+          path: difference.txt
