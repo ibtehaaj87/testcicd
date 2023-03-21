@@ -200,5 +200,5 @@ jobs:
       - uses: geekyeggo/delete-artifact@v2
         with:
           name: |
-            artifact*
+            apk*
             current_dependencies
