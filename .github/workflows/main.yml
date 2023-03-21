@@ -36,15 +36,6 @@ jobs:
           fail_on_error: true
           reviewdog_level: error
 
-      - name: CodeAnalysis via  detekt
-        run: ./gradlew detekt
-
-      - name: Upload detekt results
-        uses: actions/upload-artifact@v2
-        with:
-          name: detekt_results
-          path: app/build/reports/detekt
-
   test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
