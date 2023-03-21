@@ -36,6 +36,15 @@ jobs:
           fail_on_error: true
           reviewdog_level: error
 
+      - name: CodeAnalysis via  detekt
+        run: ./gradlew detekt
+
+      - name: Upload detekt results
+        uses: actions/upload-artifact@v2
+        with:
+          name: detekt_results
+          path: app/build/reports/detekt
+
   test:
     name: Run Unit Tests
     runs-on: ubuntu-latest
@@ -181,6 +190,7 @@ jobs:
 
       - name: comment PR
         uses: machine-learning-apps/pr-comment@1.0.0
-        message: $difference
         env:
           GITHUB_TOKEN: ${{ github.token }}
+        with:
+          message: $difference
