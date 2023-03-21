@@ -184,7 +184,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Get dependencies list
-        run: ./gradlew :app:dependencies --configuration > current_dependencies.txt
+        run: ./gradlew :app:dependencies --configuration appDebugRuntimeClasspath > current_dependencies.txt
 
       - name: Uploading Current Dependencies Artifact
         uses: actions/upload-artifact@v3
@@ -198,7 +198,7 @@ jobs:
           ref: main
 
       - name: Get dependencies list
-        run: ./gradlew :app:dependencies --configuration > previous_dependencies.txt
+        run: ./gradlew :app:dependencies --configuration appDebugRuntimeClasspath > previous_dependencies.txt
 
       - name: Download Artifact
         uses: actions/download-artifact@v1
