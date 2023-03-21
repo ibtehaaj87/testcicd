@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    fun unusedFunction() {
-        val a =2
-    }
+//    fun unusedFunction() {
+//        val a =2
+//    }
 }
