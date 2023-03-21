@@ -12,6 +12,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun unusedFunction() {
-
+        val a =2
     }
 }
