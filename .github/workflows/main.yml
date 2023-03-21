@@ -186,3 +186,19 @@ jobs:
           path: difference.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+
+  delete_artifacts:
+    name: Find dependencies difference
+    needs: [ find_dependencies_difference, apk_difference ]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: geekyeggo/delete-artifact@v2
+        with:
+          name: |
+            artifact_*
+            current_dependencies
