@@ -180,8 +180,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: comment PR
-          uses: machine-learning-apps/pr-comment@1.0.0
-          with:
-            path: difference.txt
-          env:
-            GITHUB_TOKEN: ${{ github.token }}
+        uses: machine-learning-apps/pr-comment@1.0.0
+        with:
+          path: difference.txt
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
