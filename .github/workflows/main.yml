@@ -186,6 +186,13 @@ jobs:
       - name: Get dependencies list
         run: ./gradlew :app:dependencies > current_dependencies.txt
 
+      - name: Uploading Current Dependencies Artifact
+        uses: actions/upload-artifact@v3
+        if: success()
+        with:
+          name: current_dependencies
+          path: current_dependencies.txt
+
       - uses: actions/checkout@v2
         with:
           ref: main
@@ -193,12 +200,16 @@ jobs:
       - name: Get dependencies list
         run: ./gradlew :app:dependencies > previous_dependencies.txt
 
+      - name: Download Artifact
+        uses: actions/download-artifact@v1
+        with:
+          name: current_dependencies
 
       - name: Download and run dependency-diff-tldr
         run: |
           gh release download -p '*.jar' -R careem/dependency-diff-tldr v0.0.2
           echo "Running Dependency Diff"
-          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies.txt > difference.txt
+          java -jar dependency-diff-tldr-r8.jar previous_dependencies.txt current_dependencies/current_dependencies.txt > difference.txt
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
