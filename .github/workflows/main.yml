@@ -78,7 +78,7 @@ jobs:
             app/build/outputs/arr
 
   build_pr:
-    name: Build PR
+    name: Build PR APK
     needs: [ test, lint ]
     runs-on: ubuntu-latest
     permissions:
@@ -139,7 +139,7 @@ jobs:
 
 
   find_dependencies_difference:
-    name: Find dependencies difference
+    name: Dependencies difference
     needs: [ build_main, build_pr ]
     runs-on: ubuntu-latest
     permissions:
