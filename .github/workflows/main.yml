@@ -35,6 +35,7 @@ jobs:
           reviewdog_reporter: github-pr-check
           fail_on_error: true
           reviewdog_level: error
+          detekt_all_rules: true
 
   test:
     name: Run Unit Tests
