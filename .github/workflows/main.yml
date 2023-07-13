@@ -51,11 +51,12 @@ jobs:
         if: always()
         run: ./gradlew testDebugUnitTest
 
-      - name: Test results
-        uses: actions/upload-artifact@v1
+      - name: HTML Preview
+        id: html_preview
+        uses: pavi2410/html-preview-action@v2
         with:
-          name: app
-          path: app/build/reports/tests/testDebugUnitTest/index.html
+          html_file: 'app/build/reports/tests/testDebugUnitTest/index.html'
+
 
 #  build_main:
 #    name: Build Main APK
