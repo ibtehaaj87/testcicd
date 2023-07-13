@@ -58,6 +58,8 @@ jobs:
         uses: pavi2410/html-preview-action@v2
         with:
           html_file: app/build/reports/tests/testDebugUnitTest/index.html
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
 
 
 #  build_main:
