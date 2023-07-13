@@ -160,7 +160,7 @@ coroutines:
   GlobalCoroutineUsage:
     active: false
   InjectDispatcher:
-    active: false
+    active: true
     dispatcherNames:
       - 'IO'
       - 'Default'
@@ -496,7 +496,9 @@ style:
   ForbiddenComment:
     active: true
     values:
-      - ''
+      - 'FIXME:'
+      - 'STOPSHIP:'
+      - 'TODO:'
     allowedPatterns: ''
     customMessage: ''
   ForbiddenImport:
