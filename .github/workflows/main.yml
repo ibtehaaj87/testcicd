@@ -53,15 +53,13 @@ jobs:
         if: always()
         run: ./gradlew testDebugUnitTest
 
-      - name: HTML Preview
-        id: html_preview
-        uses: pavi2410/html-preview-action@v2
+      - name: Comment Webpage Screenshot
+        uses: saadmk11/comment-webpage-screenshot@main
         with:
-          html_file: 'app/build/reports/tests/testDebugUnitTest/index.html'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          message: ${{ format('[Click here to preview HTML page in browser]({0})', steps.html_preview.outputs.url) }}
-
-
+          # Optional, the action will capture screenshots
+          # of the html files provided in this input.
+          # Comma seperated file paths are accepted
+          capture_html_file_paths: "app/build/reports/tests/testDebugUnitTest/index.html"
 #  build_main:
 #    name: Build Main APK
 #    needs: [ test, lint ]
