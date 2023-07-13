@@ -53,13 +53,13 @@ jobs:
         if: always()
         run: ./gradlew testDebugUnitTest
 
-      - name: Comment Webpage Screenshot
-        uses: saadmk11/comment-webpage-screenshot@main
+      - name: Upload AAR files
+        if: always()
+        uses: actions/upload-artifact@v2
         with:
-          # Optional, the action will capture screenshots
-          # of the html files provided in this input.
-          # Comma seperated file paths are accepted
-          capture_html_file_paths: "app/build/reports/tests/testDebugUnitTest/index.html"
+          path: app/build/reports/tests/testDebugUnitTest/index.html
+
+
 #  build_main:
 #    name: Build Main APK
 #    needs: [ test, lint ]
