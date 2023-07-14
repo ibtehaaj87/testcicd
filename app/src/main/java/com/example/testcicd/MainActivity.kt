@@ -23,12 +23,4 @@ class MainActivity : AppCompatActivity() {
         const val OYEE = "fhjniusdhfiuashf"
     }
 
-    suspend fun coroutine() {
-        coroutineScope {
-            launch(Dispatchers.IO) {
-
-            }
-        }
-    }
-
 }
