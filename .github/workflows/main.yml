@@ -31,7 +31,7 @@ jobs:
         uses: alaegin/Detekt-Action@v1.22.0
         with:
           github_token: ${{ github.token }}
-          detekt_config: detect-custom-rules/src/main/resources/config/config.yml
+          detekt_config: detekt-custom-rules/src/main/resources/config/config.yml
           reviewdog_reporter: github-pr-check
           fail_on_error: true
           reviewdog_level: error
