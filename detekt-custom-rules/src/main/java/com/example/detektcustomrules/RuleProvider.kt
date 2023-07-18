@@ -1,4 +1,4 @@
-package com.example.testcicd.ruleset
+package com.example.detektcustomrules
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -9,6 +9,6 @@ class RuleProvider: RuleSetProvider {
         get() = "custom-rules"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf())
+        return RuleSet(ruleSetId, listOf(ObservableValRule(config), HardcodedString(config)))
     }
 }
