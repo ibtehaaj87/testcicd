@@ -36,7 +36,7 @@ jobs:
           fail_on_error: true
           reviewdog_level: error
           detekt_all_rules: true
-          detekt_plugins: ':detekt-custom-rules'
+          detekt_plugins: 'detekt-custom-rules'
 
   test:
     name: Run Unit Tests
