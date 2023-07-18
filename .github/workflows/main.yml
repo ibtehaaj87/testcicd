@@ -36,7 +36,7 @@ jobs:
           fail_on_error: true
           reviewdog_level: error
           detekt_all_rules: true
-          detekt_plugins: 'detekt-custom-rules'
+          detekt_plugins: 'detekt-custom-rules.jar'
 
   test:
     name: Run Unit Tests
@@ -59,6 +59,10 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: app/build/reports/tests/testDebugUnitTest/index.html
+
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
 
 
 #  build_main:
