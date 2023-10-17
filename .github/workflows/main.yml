@@ -54,9 +54,12 @@ jobs:
         if: always()
         run: ./gradlew testDebugUnitTest
 
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }}
+      - name: Upload Test Report file
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: test_report
+          path: app/build/reports/tests/testDevDebugUnitTest/index.html
 
 
 #  build_main:
