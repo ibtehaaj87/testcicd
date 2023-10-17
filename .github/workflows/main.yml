@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize]
     branches:
       - main
+  push:
 
 jobs:
 
@@ -53,11 +54,9 @@ jobs:
         if: always()
         run: ./gradlew testDebugUnitTest
 
-      - name: Upload AAR files
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          path: app/build/reports/tests/testDebugUnitTest/index.html
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
 
 
 #  build_main:
